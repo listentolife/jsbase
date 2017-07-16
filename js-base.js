@@ -33,3 +33,21 @@ js.addListener = function(target, type, handler){//定义一个公共函数来�
 				target["on" + type] = handler;
 				}
 	};
+
+js.bindEvent = function(elem, type, selector, handler) {//定义一个公共函数解决事件监听（包括代理但不兼容attachEvent）
+	if(handler = null) {//如果没有代理，则赋值为null
+		handler = selector;
+		selector = null;
+	}
+	elem.addEventListener(type, function(e) {
+		var target;
+		if(selector) {
+			target = e.target;
+			if(target.matches(selector)) {
+				handler.call(target, e);
+			}
+		} else {
+			handler(e);
+		}
+	})
+}
